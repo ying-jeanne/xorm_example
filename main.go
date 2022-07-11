@@ -33,15 +33,14 @@ func (t Team2) TableName() string {
 	return "team"
 }
 
-func setTeam(e *xorm.Engine, team1 Team) error {
+func insertTeam(e *xorm.Engine, team1 Team) error {
 	// for insert, xorm is actually checking that all the filled field has a corresponding column name, if not, error out
 	// not set field would be filled directly with default value when creation
 	var err error
 	if _, err = e.Insert(&team1); err != nil {
 		log.Fatal(err)
-		return err
 	}
-	return nil
+	return err
 }
 
 func getTeam(e *xorm.Engine, name string) Team {
@@ -77,7 +76,7 @@ func main() {
 	}
 	engine.SetTableMapper(names.GonicMapper{})
 	team1 := Team{Name: "myname4", OrgID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}
-	err = setTeam(engine, team1)
+	err = insertTeam(engine, team1)
 	if err != nil {
 		log.Fatal(err)
 	}
